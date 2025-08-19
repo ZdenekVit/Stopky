@@ -4,8 +4,8 @@
     {
         static void Main(string[] args)
         {
-            //Testovací komentář
-            Console.WriteLine("Hello, World 2!");
+            Casovac stopky = new Casovac();
+            stopky.CasStart();
         }
     }
 }
