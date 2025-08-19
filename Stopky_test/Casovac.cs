@@ -9,16 +9,22 @@ namespace Stopky_test
 {
     internal class Casovac
     {
+        Databaze historie = new Databaze();
+
         DateTime zacatek;
         TimeSpan konec;
         TimeSpan nula = DateTime.Now - DateTime.Now;
         bool casovacJede = false;
         TimeSpan casPauzi = DateTime.MinValue.TimeOfDay;
+        int mereni = 1;
 
         //list docasne drzíci zaznami
         List<TimeSpan> Zaznami = new List<TimeSpan>();
+
         //list docasne drzíci zaznami mezicasu (elemnt s indexem 0 je 00:00:00:00 takže je o +1 posunuty)
         List<TimeSpan> ZaznamiMeziCasu = new List<TimeSpan>();
+
+
         //Konstruktor
         public Casovac() 
         {
@@ -138,19 +144,48 @@ namespace Stopky_test
             menuVoleb(Console.ReadKey(true));
         }
 
-        //Resetuje hodnotu casovace
+        //Resetuje hodnotu casovace a vycisti nedavnou historii a předa ji Databazi
         public void Restart()
         {
+            //vynuluje cas pauzi
             casPauzi = DateTime.MinValue.TimeOfDay;
+            //vypne casovac
             casovacJede=false;
+            //zkontroluje zda jsou dočasné seznami prázdné
+            if(Zaznami.Count == 0 && ZaznamiMeziCasu.Count == 1)
+            {
+
+            }else // pokud ne udělá z existujících záznamu instance a uložíje do databáze
+            {
+                //dočasná proměná pro očíslování záznamu
+                int j = 1;
+                foreach (TimeSpan zaznam in Zaznami)
+                {
+                    historie.Vlozit(new Zaznam(mereni, j, ZaznamiMeziCasu[j], zaznam));
+                    j++;
+                }
+                //vypráznění seznamu
+                ZaznamiMeziCasu.Clear();
+                Zaznami.Clear();
+                mereni++;
+                historie.Vypis();
+                //opětovné přidání nuly do mezicasu
+                ZaznamiMeziCasu.Add(nula);
+            }
+
+            //vycisti nedavnou historii v konzoli
             for(int x = 5; x <= 11; x++)
             {
                 Console.SetCursorPosition(0, x);
                 Console.Write("                                        ");
             }
+            //nastavi a prepise casovac na 00
             Console.SetCursorPosition(0, 0);
+
             konec = TimeSpan.Zero;
+
             Console.Write($"\r   {Formatovat(konec)}  ");
+
             menuVoleb(Console.ReadKey(true));
         }
 
