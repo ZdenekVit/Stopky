@@ -25,6 +25,10 @@ namespace Stopky_test
         }
         public void Vypis()
         {
+            Console.Clear();
+            Console.WriteLine("*-----------Historie-----------*");
+            Console.WriteLine("(U)ložit záznam - (Z)pět");
+            Console.WriteLine("Kolo --- Mezičas --- Čas");
             int y = 0;
             foreach (Zaznam zaznam in historie)
             {
@@ -32,13 +36,21 @@ namespace Stopky_test
                 {
                     y++;
                     Console.WriteLine("*-----------měření "+ y +"--------*");
-                    Console.WriteLine(zaznam.m_kolo + " --- " + zaznam.m_mezicas + " --- " + zaznam.m_cas);
+                    Console.WriteLine(zaznam.m_kolo + " --- " + Formatovat(zaznam.m_mezicas) + " --- " + Formatovat(zaznam.m_cas));
                 }
                 else
                 {
-                    Console.WriteLine(zaznam.m_kolo + " --- " + zaznam.m_mezicas + " --- " + zaznam.m_cas);
+                    Console.WriteLine(zaznam.m_kolo + " --- " + Formatovat(zaznam.m_mezicas) + " --- " + Formatovat(zaznam.m_cas));
                 }
             }
+        }
+
+        //metoda pro formatovani na text je to trochu redundantní
+        public string Formatovat(TimeSpan formatovat)
+        {
+                string vysledek = string.Format("{0:00}:{1:00}:{2:00}:{3:00}",
+                    (int)formatovat.TotalHours, formatovat.Minutes, formatovat.Seconds, formatovat.Milliseconds / 10);
+                return vysledek;
         }
 
     }

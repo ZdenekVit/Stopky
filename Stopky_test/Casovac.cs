@@ -28,6 +28,7 @@ namespace Stopky_test
         //Konstruktor
         public Casovac() 
         {
+            menu();
             //vlozí původní záznam 00:00:00:00 aby první mezicas vysel
             ZaznamiMeziCasu.Add(nula);
             Restart();
@@ -63,6 +64,16 @@ namespace Stopky_test
                 else if (volba.Key == ConsoleKey.R)
                 { 
                         Restart();
+                }//pokud je klavesa H pro Historii
+                else if (volba.Key == ConsoleKey.H)
+                { 
+                        HistorieZaznamu();
+                }
+                //pokud je klavesa Z pro Zpět
+                else if (volba.Key == ConsoleKey.Z)
+                {
+                        Console.Clear();
+                        CasStart(DateTime.Now);
                 }
             
         }
@@ -70,6 +81,7 @@ namespace Stopky_test
         //Spustí se casomira
         public void CasStart(DateTime start) 
         {
+            menu();
             //Ziska cas pri zmacknuti Start
             zacatek = start;
             //zapne casovac
@@ -168,7 +180,6 @@ namespace Stopky_test
                 ZaznamiMeziCasu.Clear();
                 Zaznami.Clear();
                 mereni++;
-                historie.Vypis();
                 //opětovné přidání nuly do mezicasu
                 ZaznamiMeziCasu.Add(nula);
             }
@@ -187,6 +198,21 @@ namespace Stopky_test
             Console.Write($"\r   {Formatovat(konec)}  ");
 
             menuVoleb(Console.ReadKey(true));
+        }
+
+        public void HistorieZaznamu()
+        {
+            historie.Vypis();
+            menuVoleb(Console.ReadKey(true));
+        }
+
+        static void menu()
+        {
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine("*-------------------------------------------*");
+            Console.WriteLine("(S)tart - (R)eset - (P)auza - (K)olo");
+            Console.WriteLine("(H)istorie - (U)lozit zaznam - Ulozene (C)asy");
+            Console.WriteLine("*-------------Nedávna Historie--------------*");
         }
 
     }
