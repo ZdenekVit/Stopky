@@ -1,0 +1,15 @@
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\bin\Debug\net7.0\Stopky_test.exe
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\bin\Debug\net7.0\Stopky_test.deps.json
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\bin\Debug\net7.0\Stopky_test.runtimeconfig.json
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\bin\Debug\net7.0\Stopky_test.dll
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\bin\Debug\net7.0\Stopky_test.pdb
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.csproj.AssemblyReference.cache
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.AssemblyInfoInputs.cache
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.AssemblyInfo.cs
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.csproj.CoreCompileInputs.cache
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.dll
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\refint\Stopky_test.dll
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.pdb
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\Stopky_test.genruntimeconfig.cache
+C:\Users\ddz12\Desktop\Stopky_test\Stopky_test\obj\Debug\net7.0\ref\Stopky_test.dll
