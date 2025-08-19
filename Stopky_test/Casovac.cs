@@ -11,11 +11,13 @@ namespace Stopky_test
     {
         DateTime zacatek;
         TimeSpan konec;
-        TimeSpan nula = DateTime.Now - DateTime.Now; 
+        TimeSpan nula = DateTime.Now - DateTime.Now;
+        bool casovacJede = false;
+        TimeSpan casPauzi = DateTime.MinValue.TimeOfDay;
 
         //list docasne drzíci zaznami
         List<TimeSpan> Zaznami = new List<TimeSpan>();
-        //list docasne drzíci zaznami mezicasu
+        //list docasne drzíci zaznami mezicasu (elemnt s indexem 0 je 00:00:00:00 takže je o +1 posunuty)
         List<TimeSpan> ZaznamiMeziCasu = new List<TimeSpan>();
         //Konstruktor
         public Casovac() 
@@ -32,32 +34,57 @@ namespace Stopky_test
             return vysledek;
         }
 
+        public void menuVoleb(ConsoleKeyInfo volba)
+        {           
+                //pokud je klavesa K pro Kolo
+                if (volba.Key == ConsoleKey.K)
+                {
+
+                    Kolo(konec, konec);
+
+                } //pokud je klavesa P pro Pauzu
+                else if (volba.Key == ConsoleKey.P)
+                {
+                    Pauza(konec);
+
+                }//pokud je klavesa S pro Start
+                else if (volba.Key == ConsoleKey.S)
+                { 
+                        CasStart(DateTime.Now);
+                }
+            
+        }
+
         //Spustí se casomira
-        public void CasStart() 
+        public void CasStart(DateTime start) 
         {
             //Ziska cas pri zmacknuti Start
-            zacatek = DateTime.Now;
-
-            while(true)
+            zacatek = start;
+            //zapne casovac
+            casovacJede=true;
+            while(casovacJede)
             {
+                //Získá aktualni cas bud před pauzou nebo po pauze
+                if (casPauzi == DateTime.MinValue.TimeOfDay)
+                {
+                    konec = (DateTime.Now - zacatek);
+                }
+                else
+                {
+                    konec = (DateTime.Now - zacatek) + casPauzi;
+                }
                 //Nastaví pozici casomiri na prvni radek
                 Console.SetCursorPosition(0, 0);
-                //Získá aktualni cas
-                konec = (DateTime.Now - zacatek);
                 //Vypise cas
                 Console.Write($"\r   {Formatovat(konec)}   ");
 
-                //Ceka na stisknuti klavesy
+                //Zavolá první menu
                 if (Console.KeyAvailable)
                 {
-                    //nacte stisknutou klavesu
                     ConsoleKeyInfo volba = Console.ReadKey();
-                    //pokud je klavesa K
-                    if (volba.Key == ConsoleKey.K)
-                    {
-                        Kolo(konec,konec);
-                    }
+                    menuVoleb(volba);
                 }
+
             }
         }
 
@@ -75,7 +102,7 @@ namespace Stopky_test
             {
                 //nastavi startovni pozici kurzoru
                 Console.SetCursorPosition(0, poziceKurzoruVHistorii);
-                //pridava zaznami odshora 
+                //vypisuje zaznami odshora 
                 if (poziceKurzoruVHistorii <= 5)
                 {
                     Console.WriteLine((i + 1) + " --- " + Formatovat(ZaznamiMeziCasu[i+1] - ZaznamiMeziCasu[i]) + " --- " + Formatovat(Zaznami[i]));
@@ -90,6 +117,19 @@ namespace Stopky_test
                     i = 0;
                 }
             }
+            //zabrání pádu pokud casovac nejede
+            if (casovacJede == false)
+            {
+                menuVoleb(Console.ReadKey());
+            }
+        }
+
+        //ulozi uběhnuty cas a vypne casovac + znovu zavolá menu volby
+        public void Pauza(TimeSpan ubehnutyCas)
+        {
+            casPauzi = ubehnutyCas;
+            casovacJede = false;
+            menuVoleb(Console.ReadKey());
         }
 
     }
