@@ -24,6 +24,8 @@ namespace Stopky_test
         {
             //vlozí původní záznam 00:00:00:00 aby první mezicas vysel
             ZaznamiMeziCasu.Add(nula);
+            Restart();
+
         }
 
         //Preformatuje datovy typ TimeSpan na String a zkrati presnost milisekund na 2 desetina cisla
@@ -35,7 +37,7 @@ namespace Stopky_test
         }
 
         public void menuVoleb(ConsoleKeyInfo volba)
-        {           
+        {
                 //pokud je klavesa K pro Kolo
                 if (volba.Key == ConsoleKey.K)
                 {
@@ -51,6 +53,10 @@ namespace Stopky_test
                 else if (volba.Key == ConsoleKey.S)
                 { 
                         CasStart(DateTime.Now);
+                }//pokud je klavesa R pro Restart
+                else if (volba.Key == ConsoleKey.R)
+                { 
+                        Restart();
                 }
             
         }
@@ -81,7 +87,7 @@ namespace Stopky_test
                 //Zavolá první menu
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKeyInfo volba = Console.ReadKey();
+                    ConsoleKeyInfo volba = Console.ReadKey(true);
                     menuVoleb(volba);
                 }
 
@@ -96,14 +102,14 @@ namespace Stopky_test
             //prida zaznam do seznamu mezicasu
             ZaznamiMeziCasu.Add(meziCas);
             //nastavi startovni hodnotu kurzoru pro nedavnou historii
-            int poziceKurzoruVHistorii = 2;
+            int poziceKurzoruVHistorii = 5;
             //dynamicky projede seznam od zadu
             for (int i = Zaznami.Count - 1; i >= 0; i--)
             {
                 //nastavi startovni pozici kurzoru
                 Console.SetCursorPosition(0, poziceKurzoruVHistorii);
                 //vypisuje zaznami odshora 
-                if (poziceKurzoruVHistorii <= 5)
+                if (poziceKurzoruVHistorii <= 10)
                 {
                     Console.WriteLine((i + 1) + " --- " + Formatovat(ZaznamiMeziCasu[i+1] - ZaznamiMeziCasu[i]) + " --- " + Formatovat(Zaznami[i]));
                     poziceKurzoruVHistorii++;
@@ -111,16 +117,16 @@ namespace Stopky_test
                 }
                 else
                 {
-                    //pokud pocet zaznamu presahne 5 ukonci projizdeni seznamu
+                    //pokud pocet zaznamu presahne 10 ukonci projizdeni seznamu
                     Console.WriteLine((i + 1) + " --- " + Formatovat(ZaznamiMeziCasu[i + 1] - ZaznamiMeziCasu[i]) + " --- " + Formatovat(Zaznami[i]));
-                    poziceKurzoruVHistorii = 2;
+                    poziceKurzoruVHistorii = 5;
                     i = 0;
                 }
             }
             //zabrání pádu pokud casovac nejede
             if (casovacJede == false)
             {
-                menuVoleb(Console.ReadKey());
+                menuVoleb(Console.ReadKey(true));
             }
         }
 
@@ -129,7 +135,23 @@ namespace Stopky_test
         {
             casPauzi = ubehnutyCas;
             casovacJede = false;
-            menuVoleb(Console.ReadKey());
+            menuVoleb(Console.ReadKey(true));
+        }
+
+        //Resetuje hodnotu casovace
+        public void Restart()
+        {
+            casPauzi = DateTime.MinValue.TimeOfDay;
+            casovacJede=false;
+            for(int x = 5; x <= 11; x++)
+            {
+                Console.SetCursorPosition(0, x);
+                Console.Write("                                        ");
+            }
+            Console.SetCursorPosition(0, 0);
+            konec = TimeSpan.Zero;
+            Console.Write($"\r   {Formatovat(konec)}  ");
+            menuVoleb(Console.ReadKey(true));
         }
 
     }

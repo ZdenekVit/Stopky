@@ -4,13 +4,17 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("(S)tart");
+            menu();
             Casovac stopky = new Casovac();
-            string starttt = Console.ReadLine();
-            if (starttt == "s")
-            {
-                stopky.CasStart(DateTime.Now);
-            }
+        }
+
+        static void menu()
+        {
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine("*-------------------------------------------*");
+            Console.WriteLine("(S)tart - (R)eset - (P)auza - (K)olo");
+            Console.WriteLine("(H)istorie - (U)lozit zaznam - Ulozene (C)asy");
+            Console.WriteLine("*-------------Nedávna Historie--------------*");
         }
     }
 }
