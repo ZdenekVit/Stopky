@@ -29,6 +29,7 @@ namespace Stopky_test
         public Casovac() 
         {
             menu();
+            historie.NactiZeSouboru();
             //vlozí původní záznam 00:00:00:00 aby první mezicas vysel
             ZaznamiMeziCasu.Add(nula);
             Restart();
@@ -73,7 +74,15 @@ namespace Stopky_test
                 else if (volba.Key == ConsoleKey.Z)
                 {
                         Console.Clear();
-                        CasStart(DateTime.Now);
+                        menu();
+                        Restart();
+                }
+                //pokud je klavesa C pro Ulozene Casy
+                else if (volba.Key == ConsoleKey.C)
+                {
+                        Console.Clear();
+                        historie.VypisZeSouboru();
+                        menuVoleb(Console.ReadKey(true));
                 }
             
         }
