@@ -200,12 +200,14 @@ namespace Stopky_test
             menuVoleb(Console.ReadKey(true));
         }
 
+        //vypise historii
         public void HistorieZaznamu()
         {
             historie.Vypis();
             menuVoleb(Console.ReadKey(true));
         }
 
+        //legenda
         static void menu()
         {
             Console.SetCursorPosition(0, 1);

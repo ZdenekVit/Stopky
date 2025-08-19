@@ -15,23 +15,28 @@ namespace Stopky_test
 
         }
 
+        //metoda pro vlozeni zaznamu do seznamu
         public void Vlozit(Zaznam zaznam)
         {
             historie.Add(zaznam);
         }
+        //metoda pro odebrani zaznamu ze seznamu
         public void Odebrat(Zaznam zaznam)
         {
             historie.Remove(zaznam);
         }
         public void Vypis()
         {
+            //vycisti konzoli a vypise legendu
             Console.Clear();
             Console.WriteLine("*-----------Historie-----------*");
             Console.WriteLine("(U)ložit záznam - (Z)pět");
             Console.WriteLine("Kolo --- Mezičas --- Čas");
+            //docasne pocitadlo pro kontrolu cisla mereni
             int y = 0;
             foreach (Zaznam zaznam in historie)
             {
+                //pokud se nerovnaji tak se navyši pokud se nenavyši znamena že byly zaznami porizeny ve stejnem meřeni
                 if(zaznam.m_mereni != y)
                 {
                     y++;
