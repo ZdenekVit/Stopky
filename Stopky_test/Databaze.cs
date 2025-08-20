@@ -14,6 +14,7 @@ namespace Stopky_test
 
         List<string> nacteneZaznami = new List<string>();
 
+        //cesta k souboru s daty
         static string cesta = ("UlozenaMereni.txt");
 
         public Databaze() 
@@ -56,46 +57,68 @@ namespace Stopky_test
             }
         }
 
+        public List<Zaznam> CisteVypisZaznamu()
+        {
+
+                return historie;
+
+        }
+
         public void VypisZeSouboru()
         {
+            //legenda
             Console.WriteLine("*---------Ulozene Časy---------*");
             Console.WriteLine("Smazat záznam (d) - (Z)pět");
+            Console.WriteLine("*------------------------------*");
             Console.WriteLine("ID --- Kolo --- Mezičasy --- čas");
+            //vypise zaznami z nactenych zaznamu
             foreach (String zaznam in nacteneZaznami)
             {
                 Console.WriteLine(zaznam);
             }
         }
 
-        public void NactiZeSouboru()
+        //nacita ze souboru
+        public int NactiZeSouboru()
         {
+            //vytvoření StreamReaderu
             StreamReader cteni = new StreamReader(cesta);
+            //proměná pro řádek
             string radek;
 
+            int pocetZaznamu=0;
+
+            //pokud radek není prázdný načítá
             while ((radek = cteni.ReadLine()) != null)
             {
-                if (radek.StartsWith("&"))
+                //pokud první znak je - znamenaje že je to komentář
+                if (radek.StartsWith("-"))
                 {
-                    nacteneZaznami.Add("---"+radek.Substring(1)+"---");
+                    nacteneZaznami.Add(radek);
                 }
-                else
+                else //pokud ne tak je to záznam
                 {
-                string[] nactenyZaznam = radek.Split(';');
-                nacteneZaznami.Add(nactenyZaznam[0] + " --- " + nactenyZaznam[1] + " --- " + nactenyZaznam[2] + " --- " + nactenyZaznam[3]);
+                nacteneZaznami.Add(radek);
                 }
-                
+
+                pocetZaznamu++;
 
             }
             cteni.Close();
+            return pocetZaznamu / 2;
         }
 
-        public void UlozDoSouboru(string poznamka,int ID,int kolo,TimeSpan mezicas, TimeSpan cas)
+        public void UlozDoSouboru(string poznamka,int ID,int kolo,string mezicas, string cas)
         {
             StreamWriter psani = new StreamWriter(cesta);
-            string zapisPoznamku = poznamka;
-            string zapis = ID + ";" + kolo + ";" + Formatovat(mezicas) + ";" + Formatovat(cas);
-            psani.WriteLine(zapisPoznamku);
-            psani.WriteLine(zapis);
+            string zapisPoznamku = "---" + poznamka+ "---";
+            string zapis = ID + "---" + kolo + "---" + mezicas + "---" + cas;
+            nacteneZaznami.Add(zapisPoznamku);
+            nacteneZaznami.Add(zapis);
+            foreach (string zaznam in nacteneZaznami)
+            {
+                psani.WriteLine(zaznam);
+            }
 
             psani.Close();
         }

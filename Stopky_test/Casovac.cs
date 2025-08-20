@@ -17,6 +17,8 @@ namespace Stopky_test
         bool casovacJede = false;
         TimeSpan casPauzi = DateTime.MinValue.TimeOfDay;
         int mereni = 1;
+        int okno = 1;
+        int pocetZaznamuVSouboru;
 
         //list docasne drzíci zaznami
         List<TimeSpan> Zaznami = new List<TimeSpan>();
@@ -29,7 +31,7 @@ namespace Stopky_test
         public Casovac() 
         {
             menu();
-            historie.NactiZeSouboru();
+            pocetZaznamuVSouboru = historie.NactiZeSouboru();
             //vlozí původní záznam 00:00:00:00 aby první mezicas vysel
             ZaznamiMeziCasu.Add(nula);
             Restart();
@@ -63,26 +65,130 @@ namespace Stopky_test
                         CasStart(DateTime.Now);
                 }//pokud je klavesa R pro Restart
                 else if (volba.Key == ConsoleKey.R)
-                { 
+                {
+                        okno = 1;
                         Restart();
                 }//pokud je klavesa H pro Historii
                 else if (volba.Key == ConsoleKey.H)
-                { 
+                {
+                        okno = 2;
                         HistorieZaznamu();
                 }
                 //pokud je klavesa Z pro Zpět
                 else if (volba.Key == ConsoleKey.Z)
                 {
+                        okno= 1;
                         Console.Clear();
                         menu();
                         Restart();
-                }
+                } //pokud je klavesa D pro Delete
+                else if (volba.Key == ConsoleKey.D)
+                {
+                        Console.Clear();
+                        Console.WriteLine("Delete jsem nestihl omlouvám se :(");
+                        Console.WriteLine("(Z)pět?");
+                        menuVoleb(Console.ReadKey(true));
+            }
                 //pokud je klavesa C pro Ulozene Casy
                 else if (volba.Key == ConsoleKey.C)
                 {
+                        okno = 3;
                         Console.Clear();
                         historie.VypisZeSouboru();
                         menuVoleb(Console.ReadKey(true));
+                }
+                //pokud je klavesa U pro Uložní casu
+                else if (volba.Key == ConsoleKey.U)
+                {
+                        //docasne pocitadlo
+                        int z = 0;
+                        //promena pro docasnou volbu kola
+                        int volbaCasu = 0;
+                        //promena pro docasnou volbu mereni
+                        int volbaMereni = 1;
+                        //input pro zabránění zaseknuti
+                        ConsoleKeyInfo docasnaVolba = new ConsoleKeyInfo('U', ConsoleKey.U, false, false, false);
+                        Console.Clear();
+                                if(okno == 1)
+                                {
+                                    //pokud je nějaký záznam v nedávné historii
+                                   if(Zaznami.Count> 0)
+                                    {
+                                        foreach (TimeSpan nedavneCasy in Zaznami)
+                                        {
+                                            Console.WriteLine((z + 1) + " --- " + Formatovat(ZaznamiMeziCasu[z + 1]) + " --- " + Formatovat(Zaznami[z]));
+                                            z++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //pokud žádný záznam v nedávné historii není
+                                        Console.WriteLine("V nedávné historii již nejsou žádné záznami. Zkuste historii");
+                                        Console.WriteLine("(Z)pět");
+                                        menuVoleb(Console.ReadKey(true));
+                                    }
+
+                                }
+                                else
+                                {
+                                    //pokud ukladame z Historie
+                                    historie.Vypis();
+                                    z = 100;
+                                    Console.Write("Napiš číslo měření ze kterého chcete ukládat: ");
+                                        try
+                                        {
+                                            volbaMereni = Int32.Parse(Console.ReadLine());
+                                        }
+                                        catch (FormatException e)
+                                        {
+                                            Console.WriteLine("Zadejte prosím číslo");
+                                            Console.ReadKey();
+                                            menuVoleb(docasnaVolba);
+                                        }
+                                }
+                 
+                    Console.Write("Napište číslo kola času který chcete uložit: ");
+                        try
+                        {
+                            volbaCasu = Int32.Parse(Console.ReadLine());
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.WriteLine("Zadejte prosím číslo");
+                            Console.ReadKey();
+                            menuVoleb(docasnaVolba);
+                        }
+                //pokud záznam který chcete uložit neexistuje
+                if (volbaCasu > z)
+                {
+                    Console.WriteLine("Takové číslo záznamu není. Zkuste to znovu.");
+                    Console.ReadKey();
+                    menuVoleb(docasnaVolba);
+                }
+                //přidávání poznámky z historie
+                else if (z == 100)
+                {
+                    Console.Write("Přidejte poznámku:");
+                    string ukladanaPoznamka = Console.ReadLine();
+
+                    List<Zaznam> docasneZaznami = historie.CisteVypisZaznamu();
+                    foreach(Zaznam zaznam in docasneZaznami)
+                    {
+                        if(zaznam.m_mereni == volbaMereni && zaznam.m_kolo == volbaCasu)
+                        {
+                            historie.UlozDoSouboru(ukladanaPoznamka,pocetZaznamuVSouboru,zaznam.m_kolo,Formatovat(zaznam.m_mezicas),Formatovat(zaznam.m_cas));
+                        }
+                    }
+                }
+                //přidávání poznámky z nedávné historie
+                else
+                {
+                    Console.Write("Přidejte poznámku:");
+                    string ukladanaPoznamka = Console.ReadLine();
+                    historie.UlozDoSouboru(ukladanaPoznamka, pocetZaznamuVSouboru, volbaCasu, Formatovat(ZaznamiMeziCasu[volbaCasu]), Formatovat(Zaznami[volbaCasu - 1]));
+                }
+                    Console.WriteLine("(Z)pět - (U)lozit další čas");
+                    menuVoleb(Console.ReadKey(true));
                 }
             
         }
@@ -182,7 +288,7 @@ namespace Stopky_test
                 int j = 1;
                 foreach (TimeSpan zaznam in Zaznami)
                 {
-                    historie.Vlozit(new Zaznam(mereni, j, ZaznamiMeziCasu[j], zaznam));
+                    historie.Vlozit(new Zaznam(mereni, j, (ZaznamiMeziCasu[j] - ZaznamiMeziCasu[j-1]), zaznam));
                     j++;
                 }
                 //vypráznění seznamu
@@ -228,3 +334,5 @@ namespace Stopky_test
 
     }
 }
+
+//by Zdeněk Vitner

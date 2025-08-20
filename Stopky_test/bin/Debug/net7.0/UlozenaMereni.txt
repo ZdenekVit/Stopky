@@ -1,4 +1,6 @@
-&Test
-1;1;asfa;asfw
-&Test2
-2;2;asfa;asfw
+---Je tak strašně pozdě :(---
+0---3---00:00:00:99---00:00:03:30
+---Nebýt tak v časovém presu dal bych si odost víc záležet---
+1---1---00:00:01:82---00:00:01:82
+---Doufám že vás tento kod neurazil---
+1---1---00:00:01:82---00:00:01:82
